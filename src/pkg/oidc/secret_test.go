@@ -28,10 +28,8 @@ func TestGetEncryptKey(t *testing.T) {
 
 func TestPkgVerifySecret(t *testing.T) {
 	SetHardcodeVerifierForTest("secret")
-	u, err := VerifySecret(context.Background(), "user", "secret")
+	err := VerifySecret(context.Background(), "user", "secret")
 	assert.Nil(t, err)
-	assert.Equal(t, "user", u.Username)
-	u2, err2 := VerifySecret(context.Background(), "user2", "not-the-secret")
+	err2 := VerifySecret(context.Background(), "user2", "not-the-secret")
 	assert.NotNil(t, err2)
-	assert.Nil(t, u2)
 }

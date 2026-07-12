@@ -17,7 +17,6 @@ package oidc
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
 )
 
@@ -26,16 +25,11 @@ type fakeVerifier struct {
 	secret string
 }
 
-func (fv *fakeVerifier) VerifySecret(_ context.Context, name string, secret string) (*UserInfo, error) {
+func (fv *fakeVerifier) VerifySecret(_ context.Context, _ string, secret string) error {
 	if secret != fv.secret {
-		return nil, verifyError(errors.New("mismatch"))
+		return verifyError(errors.New("mismatch"))
 	}
-	return &UserInfo{
-		Username: name,
-		Email:    fmt.Sprintf("%s@test.local", name),
-		Subject:  "subject",
-		Issuer:   "issuer",
-	}, nil
+	return nil
 }
 
 // SetHardcodeVerifierForTest overwrite the default secret manager for testing.

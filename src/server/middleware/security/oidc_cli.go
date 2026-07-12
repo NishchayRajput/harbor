@@ -69,15 +69,13 @@ func (o *oidcCli) Generate(req *http.Request) security.Context {
 		return nil
 	}
 
-	info, err := oidc.VerifySecret(ctx, username, secret)
-	if err != nil {
+	if err := oidc.VerifySecret(ctx, username, secret); err != nil {
 		if u.UserID != 1 { // skip the admin user
 			logger.Errorf("failed to verify secret, username: %s, error: %v", username, err)
 		}
 		return nil
 	}
 
-	oidc.InjectGroupsToUser(info, u)
 	logger.Debugf("an OIDC CLI security context generated for request %s %s", req.Method, req.URL.Path)
 	return local.NewSecurityContext(u)
 }
